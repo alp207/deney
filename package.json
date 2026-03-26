@@ -1,0 +1,15 @@
+{
+  "name": "one-v-one-render",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Render-ready host and WebSocket proxy for the 1v1.io client.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.1"
+  }
+}

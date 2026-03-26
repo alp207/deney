@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>1v1.io</title>
+    <link rel="icon" href="./assets/dragon.png" type="image/png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <script defer src="pixi.min.js"></script>
+    <script defer src="render-config.js"></script>
+    <script defer src="game.min.js"></script>
+
+    <main id="main-game__wrapper">
+      <h1 id="main-game__header">1v1.io</h1>
+
+      <div id="menu__wrapper">
+        <select id="server__select">
+          <option selected value="paris">Paris</option>
+          <option value="dallas">Dallas</option>
+          <option value="singapore">Singapore</option>
+          <option value="local">Local</option>
+        </select>
+        <input maxlength="14" id="name__input" placeholder="Your name" />
+        <button id="play-game__button">Play</button>
+      </div>
+
+      <div id="credits__wrapper">
+        <h3>Made by jerry</h3>
+      </div>
+    </main>
+
+    <input
+      id="chat__input"
+      maxlength="35"
+      placeholder="Chat here..."
+      style="display: none"
+    />
+  </body>
+</html>

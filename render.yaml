@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: one-v-one-render-static
+    runtime: static
+    buildCommand: node build-static-site.js
+    staticPublishPath: ./static-dist
+    envVars:
+      - key: WS_BRIDGE_BASE_URL
+        value: wss://one-v-one-render-bridge.onrender.com
+      - key: NODE_VERSION
+        value: "20"
+  - type: web
+    name: one-v-one-render-bridge
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: WS_TARGET_PARIS
+        value: ws://34.163.125.218:3000
+      - key: WS_TARGET_DALLAS
+        value: ws://34.174.9.160:3000
+      - key: WS_TARGET_SINGAPORE
+        value: ws://136.110.6.144:3000
+      - key: WS_TARGET_LOCAL
+        value: ws://127.0.0.1:3000
