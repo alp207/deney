@@ -20,11 +20,5 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "20"
-      - key: WS_TARGET_PARIS
-        value: ws://34.163.125.218:3000
-      - key: WS_TARGET_DALLAS
-        value: ws://34.174.9.160:3000
-      - key: WS_TARGET_SINGAPORE
-        value: ws://136.110.6.144:3000
-      - key: WS_TARGET_LOCAL
-        value: ws://127.0.0.1:3000
+      - key: WS_TARGET_FRANKFURT
+        value: ""

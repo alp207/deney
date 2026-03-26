@@ -12,10 +12,7 @@ const ROOT_DIR = __dirname;
 const INDEX_FILE = path.join(ROOT_DIR, "index.html");
 
 const WS_TARGETS = {
-  paris: process.env.WS_TARGET_PARIS || "ws://34.163.125.218:3000",
-  dallas: process.env.WS_TARGET_DALLAS || "ws://34.174.9.160:3000",
-  singapore: process.env.WS_TARGET_SINGAPORE || "ws://136.110.6.144:3000",
-  local: process.env.WS_TARGET_LOCAL || "ws://127.0.0.1:3000"
+  frankfurt: (process.env.WS_TARGET_FRANKFURT || "").trim()
 };
 
 const MIME_TYPES = {
@@ -150,7 +147,7 @@ function bridgeSockets(clientSocket, upstreamSocket) {
 
   upstreamSocket.on("error", (error) => {
     console.error("Upstream WebSocket error:", error.message);
-    closeSocket(clientSocket, 1011, "Upstream connection failed");
+    closeSocket(clientSocket, 1008, "Upstream connection failed");
   });
 }
 
@@ -201,15 +198,21 @@ const server = http.createServer((request, response) => {
 
 server.on("upgrade", (request, socket, head) => {
   const targetKey = request.url ? getTargetKey(request.url) : null;
-  const targetUrl = targetKey ? WS_TARGETS[targetKey] : null;
+  const hasTargetKey = Boolean(targetKey && Object.prototype.hasOwnProperty.call(WS_TARGETS, targetKey));
+  const targetUrl = hasTargetKey ? WS_TARGETS[targetKey] : null;
 
-  if (!targetKey || !targetUrl) {
+  if (!hasTargetKey) {
     socket.write("HTTP/1.1 404 Not Found\r\n\r\n");
     socket.destroy();
     return;
   }
 
   webSocketServer.handleUpgrade(request, socket, head, (clientSocket) => {
+    if (!targetUrl) {
+      closeSocket(clientSocket, 1008, "Frankfurt backend is not configured");
+      return;
+    }
+
     const upstreamSocket = new WebSocket(targetUrl, {
       perMessageDeflate: false
     });
@@ -218,7 +221,7 @@ server.on("upgrade", (request, socket, head) => {
 
     upstreamSocket.on("unexpected-response", (_request, upstreamResponse) => {
       console.error("Unexpected upstream response:", upstreamResponse.statusCode);
-      closeSocket(clientSocket, 1011, "Unexpected upstream response");
+      closeSocket(clientSocket, 1008, "Unexpected upstream response");
     });
   });
 });
